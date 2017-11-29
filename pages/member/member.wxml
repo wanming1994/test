@@ -56,23 +56,28 @@
 
     <view class="itemBottom">
       <view data-current="1" bindtap="toOrder">
-        <text class="iconfont icon-daifukuan2"></text>
+        <image src='../../resources/images/member/unpay.png' class='orderImg'></image>
         <text class="orderType">待付款</text>
         <text class="tips baseBg" wx:if="{{memberInfo.unpaid}}">{{memberInfo.unpaid}}</text>
       </view>
       <view data-current="2" bindtap="toOrder">
-        <text class="iconfont icon-daifahuo1"></text>
+       <image src='../../resources/images/member/unshipped.png' class='orderImg'></image>
         <text class="orderType">待发货</text>
         <text class="tips baseBg" wx:if="{{memberInfo.unshipped}}">{{memberInfo.unshipped}}</text>
       </view>
       <view data-current="3" bindtap="toOrder">
-        <text class="iconfont icon-daishouhuo1"></text>
+        <image src='../../resources/images/member/unreceived.png' class='orderImg'></image>
         <text class="orderType">待收货</text>
         <text class="tips baseBg" wx:if="{{memberInfo.unreciver}}">{{memberInfo.unreciver}}</text>
       </view>
       <view data-current="4" bindtap="toOrder">
-        <text class="iconfont icon-daipingjia1"></text>
-        <text class="orderType">待评价</text>
+        <image src='../../resources/images/member/complete.png' class='orderImg'></image>
+        <text class="orderType">已完成</text>
+        <text class="tips baseBg" wx:if="{{memberInfo.unreview}}">{{memberInfo.unreview}}</text>
+      </view>
+      <view data-current="4" bindtap="toOrder">
+        <image src='../../resources/images/member/all.png' class='orderImg'></image>
+        <text class="orderType">全部订单</text>
         <text class="tips baseBg" wx:if="{{memberInfo.unreview}}">{{memberInfo.unreview}}</text>
       </view>
     </view>
