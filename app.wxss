@@ -10,7 +10,8 @@ page {
   background: #f4f4f4;
 }
 
-/* 加载中 */
+
+/* s加载中 */
 
 
 .loadBtn {
