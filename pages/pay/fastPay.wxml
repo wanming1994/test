@@ -1,0 +1,28 @@
+<!-- <view class="flexC details borderA">
+  <view class="orderImg">
+    <image src="{{orderItem.thumbnail?orderItem.thumbnail:'/resources/user.png'}}"></image>
+  </view>
+  <view class="shopInfo">
+    <view class="shopName f14 overone">{{orderItem.name}}</view>
+    <view class="orderNumber f14">订单号:{{item.sn}}</view>
+    <view class="shopPrice f14 clr_orange">￥ {{orderItem.price}}</view>
+  </view>
+  <view class="shopNumber">
+    <view>x{{orderItem.quantity}}</view>
+  </view>
+</view> -->
+<view class="flexC details borderA">
+  <view class="orderImg">
+    <image src="http://cdn.tiaohuo.com/upload/image/201707/96f4766f-ad95-4ba4-beb4-e7b38403efd2-source.jpg@320w_320h_1e_1c_100Q"></image>
+  </view>
+  <view class="shopInfo">
+    <view class="shopName f14 overone">WAWAWAWAWAWWWWAWAWAWAWAWASSSSWAWAS</view>
+    <!-- <view class="orderNumber f14">订单号:{{item.sn}}</view> -->
+    <view class="shopPrice f14 clr_orange">￥ 1234.56</view>
+  </view>
+  <view class="shopNumber">
+    <view>x 1</view>
+  </view>
+</view>
+<include src="/template/actionsheet/actionsheet.wxml" />
+<include src="/template/password/payPassword.wxml" />

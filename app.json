@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/influence/influence",
+    "pages/home/productList/productList",
+    "pages/home/productDetails/evaluate/evaluate",
+    "pages/home/productDetails/productDetails",
+    "pages/pay/success",
+    "pages/pay/pay",
+    "pages/member/coupon/list",
+    "pages/member/password/password",
+    "pages/member/favorite/favorite",
+    "pages/member/member",
+    "pages/member/bind/bind",
+    "pages/member/bank/bank",
+    "pages/member/order/order",
+    "pages/member/order/logistics/logistics",
+    "pages/member/order/orderDetails/orderDetails",
+    "pages/member/order/orderEvaluate/orderEvaluate",
+    "pages/include/captcha/captcha"
+  ],
+  "tabBar": {
+    "color": "#fff",
+    "backgroundColor": "#393939",
+    "selectedColor": "#1296db",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "/resources/images/tabBar/home.png",
+        "selectedIconPath": "/resources/images/tabBar/home-sel.png"
+      },
+      {
+        "pagePath": "pages/influence/influence",
+        "text": "影响力",
+        "iconPath": "/resources/images/tabBar/influence.png",
+        "selectedIconPath": "/resources/images/tabBar/influence-sel.png"
+      },
+
+      {
+        "pagePath": "pages/member/member",
+        "text": "我的",
+        "iconPath": "/resources/images/tabBar/mine.png",
+        "selectedIconPath": "/resources/images/tabBar/mine-sel.png"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "#ffa73d",
+    "navigationBarBackgroundColor": "#393939",
+    "navigationBarTitleText": ".",
+    "navigationBarTextStyle": "red"
+  }
+}

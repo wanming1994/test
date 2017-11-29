@@ -1,0 +1,165 @@
+<!--swiper  -->
+<import src="/template/swiper/swiper.wxml" />
+<!--商品列表  -->
+<import src="/template/productList/productListTemp.wxml" />
+<!-- 商品详情 -->
+<import src="../../wxParse/wxParse.wxml" />
+
+<button loading="{{!pageLoad}}" hidden="{{pageLoad}}" class="f14 loadBtn clr_lightGray">加载中</button>
+
+<view hidden="{{!pageLoad}}"  style='padding-bottom:104rpx;'>
+  <template is="adSwiper" wx:if="{{productData.productImages}}" data="{{_swiper,showDot:productData.productImages.length>1,name:'top',data:productData.productImages,key:'source',videoCover:videoCover,videoUrl:videoUrl}}"></template>
+  <view class="title box-b clr_titleWhite f18 padding2">
+    <view>{{productData.name}}</view>
+    <view class="lineItem padding0">
+      <view class="left lineH_two" style='align-items:center;'>
+        <text class="clr_orange f16">￥{{productData.price}}</text>
+        <text class="sumdel f14 clr_lightGray" hidden="{{productData.price>=productData.marketPrice}}">￥{{productData.marketPrice}}</text>
+      </view>
+      <view class="center"></view>
+      <view class="right f14 clr_lightGray">{{productData.hits}}人访问 月销{{productData.monthSales}}件</view>
+    </view>
+  </view>
+  <view class="evaluation">
+    <view class="lineItem border_bottom lineItem_access f16">
+      <view class="left">评价</view>
+      <view class="right clr_orange f14">好评{{productData.positivePercent}}%</view>
+    </view>
+    <view class="tc f14 lineH_three clr_lightGray" wx:if="{{!productData.review}}">暂无评价,购买后快来发表评价</view>
+    <view class="lineItem head f14" wx:if="{{productData.review}}">
+      <view class="left">
+        <image src="{{productData.review.headImg?productData.review.headImg:'/resources/images/usernone.png'}}" class="headImg"></image>
+        {{reviewName}}
+      </view>
+      <view class="right clr_lightGray f12">{{productData.review.createDate}}</view>
+    </view>
+    <view class="f16 padding2 border_bottom" wx:if="{{productData.review}}">
+      {{productData.review.content}}
+    </view>
+    <view class="padding2 f14 tc" wx:if="{{productData.review}}" bindtap='ecaluate'>查看全部评价</view>
+  </view>
+  <view class='product_attributes' wx:if="{{showAttribute}}">
+    <view class='title f14 tc'>宝贝属性</view>
+    <view class="wxParse content" wx:for="{{attributesList}}" wx:key="id" wx:for-item="item">
+      <!-- <template is="wxParse" data="{{wxParseData:attributes.nodes}}" /> -->
+      <view class='lineItem border_bottom'>
+        <view class='left'>{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+  <view class='product_introduction' wx:if="{{productData.introduction}}">
+    <view class='title f14 tc'>宝贝详情</view>
+    <view class="wxParse content">
+      <template is="wxParse" data="{{wxParseData:introduction.nodes}}" />
+    </view>
+  </view>
+  <view class="recommend">
+    <view class="padding2 f14 tc border_bottom">店主推荐</view>
+    <template is="productList" data="{{data:tenantRecomList}}"></template>
+  </view>
+</view>
+
+<view class="tab">
+  <view class="clr_lightGray f14 left">
+    <button open-type="contact" hover-class="none" class="f14" session-from="weapp" send-message-title="亲！我正在看这个商品" send-message-path="/pages/home/productDetails/productDetails?id={{productData.id}}" show-message-card="true" style='border-radius:0'>
+      <image src="/resources/images/icon/kefu.png"></image>
+      <view class="">客服</view>
+    </button>
+    <view bindtap='favorite'>
+      <image src="/resources/images/icon/sstar.png" wx:if='{{productData.hasFavorite}}'></image>
+      <image src="/resources/images/icon/starempty.png" wx:if='{{!productData.hasFavorite}}'></image>
+      <view>收藏</view>
+    </view>
+    <view bindtap="toCart" style='position:relative;'>
+      <image src="/resources/images/icon/cart.png"></image>
+      <view class="">购物车</view>
+      <text class="tips baseBg" wx:if="{{cartCount}}">{{cartCount}}</text>
+    </view>
+  </view>
+  <view class="clr-white f14 right">
+    <view style="background:#feae31;" data-type="cart" bindtap="toggleMask">
+      加入购物车
+    </view>
+    <view style="background:#ff666a;" data-type="buy" bindtap="toggleMask">
+      立即购买
+    </view>
+  </view>
+</view>
+<view class="actionMask" catchtouchmove="catchActionMask" hidden="{{!showAction}}" bindtap="toggleMask"></view>
+<view class="actionContent" hidden="{{!showAction}}">
+  <view class="actionTitle border_bottom lineItem">
+    <view class="left">
+      <image src="{{selectData.thumbnail}}"></image>
+    </view>
+    <view class="center f14">
+      <view class="f16 clr_orange bold">￥{{selectData.price}}</view>
+      <view>库存{{selectData.availableStock}}件</view>
+      <view>已选
+        <text class="clr_orange">{{selectData.specifications[0].name}} {{selectData.specifications[1].name}}</text>
+      </view>
+    </view>
+    <view class="right" bindtap="toggleMask">
+      <image src="/resources/images/icon/close.png"></image>
+    </view>
+  </view>
+  <wxs module="canClickFn">
+    module.exports = function(arr, id, selectArr) {
+      if (selectArr.length == 1) {
+        return true;
+      }
+      if (!arr) {
+        return false;
+      }
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == id) {
+          return true;
+        }
+      }
+      return false;
+    }
+  </wxs>
+  <view class="actionSpecifications border_bottom">
+    <block wx:for="{{specification.all}}" wx:key="id" wx:for-index="idx">
+      <view class="actionItemTitle f16" data-id="{{item.id}}">{{item.name}}：</view>
+      <view class="actionItemBtn f16">
+        <block wx:for="{{item.specificationValues}}" wx:for-item="citem" wx:key="id">
+          <text bindtap="checkout" class="{{selectArr[idx] == citem.id?'active':''}} {{canClickFn(canClick[selectArr[1-idx]],citem.id,selectArr)?'canTap':'' }}" data-idx="{{idx}}" data-can="{{canClickFn(canClick[selectArr[1-idx]],citem.id,selectArr)}}" data-id="{{citem.id}}">{{citem.name}}</text>
+        </block>
+      </view>
+    </block>
+  </view>
+  <view class="actionNumber border_bottom lineItem" style="align-items:center;">
+    <view class="f16 ">购买数量:</view>
+    <view class="amount">
+      <button data-type="reduce" bindtap="revisenum">-</button>
+      <input class="f12 " type="number " data-type="input" bindchange="revisenum" value="{{selectData.quantity}}" />
+      <button data-type="add" bindtap="revisenum">+</button>
+    </view>
+  </view>
+  <button class="defaultBtn " bindtap="paySubmit">确认</button>
+</view>
+
+<view class="actionMask" wx:if="{{showShortcut}}" bindtap="toggleshowShortcut"></view>
+<view class='shortcut f12' bindtap='openShortcut' wx:if="{{!showShortcut}}">
+  <view>快捷</view>
+  <view>导航</view>
+</view>
+<view class='shortcut shortcutClose baseBg' bindtap='openShortcut' wx:if="{{showShortcut}}"><text class='iconfont icon-quxiao f18'></text></view>
+<view class='shortcutInfo f12' wx:if="{{showShortcut}}">
+  <view class='tr shortcutInfoList' bindtap='goHome'>
+    <text>首页</text>
+    <image src='/resources/images/product/nav1.png'></image>
+  </view>
+  <view class='tr shortcutInfoList' bindtap='goFavorite'>
+    收藏
+    <image src='/resources/images/product/nav2.png'></image>
+  </view>
+  <view class='tr shortcutInfoList' bindtap='goSearch'>
+    搜索
+    <image src='/resources/images/product/nav3.png'></image>
+  </view>
+  <view class='tr shortcutInfoList' bindtap='goCart'>
+    购物车
+    <image src='/resources/images/product/nav4.png'></image>
+  </view>
+</view>

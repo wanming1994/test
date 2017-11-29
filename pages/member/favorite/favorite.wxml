@@ -1,0 +1,4 @@
+<!--商品列表  -->
+<import src="/template/productList/productListTemp.wxml" />
+<template is="productList" data="{{data:collectList}}"></template>       
+<view class="tips" hidden="{{showtips}}">{{tips}}</view>

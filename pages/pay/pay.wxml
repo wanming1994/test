@@ -1,0 +1,152 @@
+<include src="/template/actionsheet/actionsheet.wxml" />
+<include src="/template/password/payPassword.wxml" />
+<!--pages/pay/pay.wxml-->
+
+<view class='f18 bold payStyleTitle'>配送方式：</view>
+<radio-group class="radio-group tc" bindchange="radioChange">
+  <label class="radio f16" wx:for="{{objectshippingMethods}}" wx:key="id">
+    <radio value="{{index}}" checked="{{(!isSelfGet&&item.method=='TPL')||(isSelfGet&&item.method=='PRIVY')}}" color='#ffa73d' />{{item.name}}
+  </label>
+</radio-group>
+
+
+ <!-- <view class="section">
+  <picker bindchange="bindPickerChange" range-key='name' range="{{objectshippingMethods}}">
+    <view class="picker lineItem lineItem_access f14">
+      <view class='center'>配送方式：</view>
+      <view class='right'>{{objectshippingMethods[index].name}}</view>
+    </view>
+  </picker>
+</view>  -->
+
+<view class='lineItem lineItem_access f14 address' hidden="{{express}}" bindtap='chooseAddress'>
+  <view class='left' wx:if="{{receiver}}">
+    <text class='iconfont icon-dizhi f66 address_icon'></text>
+  </view>
+  <view class='left' wx:if="{{!receiver}}">
+    <text class='iconfont icon-dizhi f66 address_icon' style='margin-top:12rpx'></text>
+  </view>
+  <view class='center lineH_two' wx:if="{{receiver}}">
+    <view>{{receiver.consignee}} {{receiver.phone}}</view>
+    <view class='clr_orange'>{{receiver.area.fullName}}{{receiver.address}}</view>
+  </view>
+  <view class='center lineH_two' wx:if="{{!receiver}}">
+    <view class='clr_red'>请选择收货地址</view>
+  </view>
+  <view class='right'></view>
+</view>
+
+<view class='toStore f14' hidden="{{since}}">
+  <view class="section">
+    <picker bindchange="storeAdressChange" range-key='fullAddress' range="{{deliveryCenterList}}">
+      <view class="picker lineItem lineItem_access f14">
+        <view class='center'>提货地址</view>
+        <view class='right' style='width:70vw;'>{{deliveryCenterList[addressId].areaName}}{{deliveryCenterList[addressId].address}}</view>
+      </view>
+    </picker>
+  </view>
+  <view class='lineItem'>
+    <view class='center'>提货人</view>
+    <view class='right'>
+      <input type='text' bindblur="f2fName" placeholder="请输入提货人" value="{{receiver?receiver.consignee:''}}" />
+    </view>
+  </view>
+  <view class='lineItem'>
+    <view class='center'>手机号</view>
+    <view class='right'>
+      <input maxlength="11" type='number' bindblur="validatemobile" placeholder="请输入手机号" value="{{receiver?receiver.phone:''}}" />
+    </view>
+  </view>
+</view>
+
+<view wx:for="{{order.trades}}" wx:key="id" wx:for-item="item">
+  <view class='lineItem f14 tenant'>
+    <view class='center'>
+      <text class='iconfont icon-dianpu bold f20'></text>{{item.tenantName}}</view>
+  </view>
+
+  <view class='lineItem product' wx:for="{{item.orderItems}}" wx:key="id" wx:for-item="orderitem">
+    <view class='left product_img'>
+      <image src='{{orderitem.thumbnail}}'></image>
+    </view>
+    <view class='center product_txt'>
+      <view class='f14'>{{orderitem.name}}</view>
+      <view class='f12'>{{orderitem.spec}}</view>
+      <view class='lineItem f16 clr_orange price'>
+        <view class='center'>￥{{orderitem.price}}</view>
+        <view class='right'>X{{orderitem.quantity}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:for="{{calcuPrice}}" wx:key="id" wx:for-item="calcitem">
+    <view class='lineItem f14 lineItem_access' wx:if="{{order.trades[index].availableCoupons.length>0}}" bindtap="toogleCouponSelect">
+      <view class='center' style='flex-direction:row;justify-content:flex-start;'>优惠券
+        <text style="background:#ffa73d;color:white;padding:0 20rpx;margin-left:20rpx;">{{order.trades[index].availableCoupons.length}}张可用</text>
+      </view>
+      <view class='right {{selectCoupon.code?"clr_orange":""}}'>{{selectCoupon.name}}</view>
+    </view>
+
+    <view class='lineItem f14' hidden="{{freight}}">
+      <view class='center'>快递运费</view>
+      <view class='right'>￥{{calcitem.freight}}</view>
+    </view>
+    <view class='lineItem border_bottom f14 word'>
+      <view class='left'>买家留言：</view>
+      <view class='center'>
+        <input maxlength="500" placeholder="给商家留言（500字以内）" bindblur='inputMemo' />
+      </view>
+    </view>
+    <view class='lineItem lineH_two f14'>
+      <view class='center tr'>小计：</view>
+      <view class='right clr_orange f16'>￥{{calcitem.amount}}</view>
+    </view>
+  </view>
+
+</view>
+
+<view class='lineItem f14 reduct' wx:if="{{discount}}">
+  <view class='center'>随机立减</view>
+  <view class='right clr_orange'>￥{{discount}}</view>
+</view>
+<!-- <view class='lineItem f14'>
+  <view class='center'>邀请码</view>
+  <view class='right'>
+    <input placeholder="请输入邀请码" />
+  </view>
+</view> -->
+
+
+<form bindsubmit="formSubmit" report-submit bindreset="formReset">
+  <view class='lineItem lineH_three f16 bottom'>
+    <view class='center tc clr_orange'>实付款：￥{{amount}}</view>
+    <button class='right' form-type="submit" style='border-radius:0'>确认下单</button>
+  </view>
+</form>
+
+<view class="couponSelect" hidden="{{!showCouponSelect}}">
+  <view class="couponmask" bindtap="toogleCouponSelect"></view>
+  <view class="couponContent">
+    <view class="couponSelectTitle f16">
+      可用优惠券
+      <!-- <image src="/resources/images/icon/close.png"></image> -->
+    </view>
+    <view class="couponList">
+      <block wx:for="{{order.trades[0].availableCoupons}}" wx:key="codeId">
+        <view class="lineItem f14 border_bottom" data-name="{{item.title}}" data-id="{{item.codeId}}" data-code="{{item.code}}" bindtap="selectCoupon">
+          <view class="center">
+            <view class="clr_orange">{{item.title}}</view>
+            <view>使用期限:{{item.endDate}}</view>
+          </view>
+          <view class="right">
+            <view style="background:#ffa73d;color:white;padding:10rpx 20rpx;border-radius:10rpx;">使用</view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view class="couponOp flex f16">
+      <view style="background:#919191;" bindtap="selectCoupon">取消使用</view>
+      <view style="background:#ffa73d;" bindtap="toogleCouponSelect">关闭</view>
+    </view>
+  </view>
+</view>
